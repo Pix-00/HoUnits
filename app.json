@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "HoUnits",
+    "slug": "HoUnits",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#eee"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "assets/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "permissions": [],
+      "enableDangerousExperimentalLeanBuilds": true,
+      "package": "com.passionfruit.HoUnits"
+    }
+  }
+}
