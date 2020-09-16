@@ -2,7 +2,8 @@
   "expo": {
     "name": "HoUnits",
     "slug": "HoUnits",
-    "version": "1.0.0",
+    "privacy": "public",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -11,7 +12,7 @@
       "backgroundColor": "#eee"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 30000
     },
     "assetBundlePatterns": [
       "assets/*"

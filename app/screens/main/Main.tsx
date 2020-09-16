@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Keyboard, View } from 'react-native';
-import { Button, RadioButton, Text } from 'react-native-paper';
-
-import Clipboard from '@react-native-community/clipboard';
+import { Clipboard, Keyboard, View } from 'react-native';
+import { RadioButton, Text } from 'react-native-paper';
 
 import BDivider from '../../components/BDivider';
+import Button from '../../components/Button';
 import Input from '../../components/Input';
+import RBHelper from '../../components/RBHelper';
 import { commonMol, convert, VUnit, WUnit } from './convertor';
 import MolDiag from './MolDiag';
 import UnitDiag from './UnitDiag';
@@ -29,80 +29,87 @@ function Main() {
       >
 
         <View style={{ flexDirection: "row" }}>
-          <View style={{ width: '64%', marginRight: 10 }}>
+          <View style={{ flex: 2, marginHorizontal: '2%' }}>
             <Input label='待转换的值' value={value} onSubmit={setValue} />
           </View>
-          <Button
-            labelStyle={{ fontSize: 26 }}
-            uppercase={false}
-            compact={true}
-            onPress={() => { setDiag('w'); Keyboard.dismiss(); }}>{wUnit}</Button>
-          <Text style={{ fontSize: 26, paddingTop: 10 }}>/</Text>
-          <Button
-            labelStyle={{ fontSize: 26 }}
-            uppercase={false}
-            compact={true}
-            onPress={() => { setDiag('v'); Keyboard.dismiss(); }}>{vUnit}</Button>
+          <View style={{ flexDirection: "row", marginHorizontal: '2%' }}>
+            <Button
+              labelStyle={{ fontSize: 26 }}
+              onPress={() => { setDiag('w'); Keyboard.dismiss(); }}
+            >{wUnit}</Button>
+            <Button
+              labelStyle={{ fontSize: 26 }}
+              color='#444'
+            >/</Button>
+            <Button
+              labelStyle={{ fontSize: 26 }}
+              onPress={() => { setDiag('v'); Keyboard.dismiss(); }}
+            >{vUnit}</Button>
+          </View>
         </View>
         {
           wUnit.endsWith('mol') || wUnit.endsWith('IU')
             ?
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ width: '70%', marginTop: 14, marginRight: 10 }}>
+            <View style={{ flexDirection: "row", marginTop: '4%' }}>
+              <View style={{ flex: 2, marginHorizontal: '2%' }}>
                 <Input label='分子量' value={mol} onSubmit={setMol} />
               </View>
-              <Button style={{ marginTop: 15 }}
+              <Button style={{ marginTop: '0.7%', marginHorizontal: '2%' }}
                 labelStyle={{ fontSize: 26 }}
-                uppercase={false}
-                compact={true}
-                onPress={() => { setDiag('m'); Keyboard.dismiss(); }}>常用值</Button>
+                onPress={() => { setDiag('m'); Keyboard.dismiss(); }}
+              >常用值</Button>
             </View>
             :
             <View></View>
-
         }
-        <View style={{ paddingTop: 20, paddingBottom: 10 }}><BDivider /></View>
+        <Button
+          labelStyle={{ fontSize: 16 }}
+          color='gray'
+          onPress={() => Clipboard.getString().then((text) => setValue(text))}
+        >~ 点击这里可以快速粘贴到输入框 ~</Button>
 
+        <View style={{ paddingTop: '4%', paddingBottom: '2.5%' }}><BDivider /></View>
 
         <View style={{ flexDirection: "row", justifyContent: 'space-evenly' }}>
           <RadioButton.Group onValueChange={val => setTUnit(val)} value={tUnit}>
-            <View>
-              <Text>pg/mL</Text>
-              <RadioButton value="pg/mL" />
-            </View>
-            <View>
-              <Text>ng/dL</Text>
-              <RadioButton value="ng/dL" />
-            </View>
-            <View>
-              <Text>ng/mL</Text>
-              <RadioButton value="ng/mL" />
-            </View>
+            <RBHelper value='pg/mL' />
+            <RBHelper value='ng/dL' />
+            <RBHelper value='ng/mL' />
           </RadioButton.Group>
         </View>
 
-        <View style={{ paddingBottom: 15, paddingTop: 10 }}><BDivider /></View>
+        <View style={{ paddingBottom: '4%', paddingTop: '2%' }}><BDivider /></View>
 
-        <Text
-          style={{ fontSize: 27, color: '#2196f3' }} >
-          {' 结果:  ' + result + ' ' + tUnit}
-        </Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <Button style={{ marginTop: 20, width: '40%', marginRight: 40 }}
-            labelStyle={{ fontSize: 20 }}
+        {
+          result < 0
+            ?
+            <Text
+              style={{ fontSize: 23, textAlign: 'center', color: '#ef5350' }} >
+              - 请选择合适的单位或检查输入 -
+            </Text>
+            :
+            <Text
+              style={{ fontSize: 27, marginLeft: '2.5%', color: '#42a5f5' }} >
+              {'结果:  ' + result.toFixed(3) + ' ' + tUnit}
+            </Text>
+
+        }
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: '4%' }}>
+          <Button
+            style={{ width: '40%', marginRight: '8%' }}
+            labelStyle={{ fontSize: 20, paddingVertical: '2.5%' }}
             mode='outlined'
-            uppercase={false}
-            compact={true}
-            onPress={() => { Clipboard.setString(result); }}>复制</Button>
-          <Button style={{ marginTop: 20, width: '40%' }}
-            labelStyle={{ fontSize: 20 }}
+            onPress={() => { Clipboard.setString(result); }}
+          >复制</Button>
+          <Button
+            style={{ width: '40%' }}
+            labelStyle={{ fontSize: 20, paddingVertical: '2.5%' }}
             mode='outlined'
-            uppercase={false}
-            compact={true}
-            onPress={() => { Clipboard.setString(result + ' ' + tUnit); }}>带单位复制</Button>
+            onPress={() => { Clipboard.setString(result + ' ' + tUnit); }}
+          >带单位复制</Button>
         </View>
 
-        <View style={{ paddingBottom: 20, paddingTop: 20 }}><BDivider /></View>
+        <View style={{ paddingBottom: '5%', paddingTop: '5%' }}><BDivider /></View>
 
       </View>
       <UnitDiag

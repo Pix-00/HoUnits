@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
-import { Button, Dialog, List, Portal } from 'react-native-paper';
+import { Dialog, List, Portal } from 'react-native-paper';
 
 
 interface MolDiagProps {
@@ -30,9 +30,6 @@ function MolDiag({ visible, molList, onSubmit, onCancel }: MolDiagProps) {
             />
           </View>
         </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={onCancel}>取消</Button>
-        </Dialog.Actions>
       </Dialog>
     </Portal >
   );

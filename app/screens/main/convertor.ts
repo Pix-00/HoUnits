@@ -35,10 +35,13 @@ const TUnitIndex = new Map([
 
 export function convert(value: string, wUnit: string, vUint: string, tUnit: string, mol?: string) {
 
-  var result = +value / WUnitIndex.get(wUnit) * VUnitIndex.get(vUint) * TUnitIndex.get(tUnit);
+  var result = parseFloat(value) / WUnitIndex.get(wUnit) * VUnitIndex.get(vUint) * TUnitIndex.get(tUnit);
 
   if (wUnit.endsWith('mol')) { result *= +mol; }
   else if (wUnit.endsWith('IU')) { result /= +mol; }
 
-  return result.toFixed(3);
+  if (result > 10000 || (result != 0 && result < 0.001)) {
+    return -1;
+  }
+  return result;
 }

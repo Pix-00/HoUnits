@@ -12,8 +12,8 @@ function More() {
     <View style={{ flexDirection: "row" }}>
       <Button
         icon='dots-horizontal' mode='text' compact={true}
+        style={{ paddingRight: 5 }} labelStyle={{ fontSize: 24 }} color='#ec407a'
         onPress={() => navigation.navigate('About')}
-        style={{ paddingRight: 5 }}
       >&#8203;</Button>
     </View>
   );

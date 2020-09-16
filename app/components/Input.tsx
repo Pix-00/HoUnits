@@ -8,15 +8,25 @@ interface InputProps {
 }
 
 export default function Input({ label, value, onSubmit }: InputProps) {
-  const update = (text: string) => {
-    var num = text.trim();
+  const [error, setError] = useState(false);
 
-    if (num === '') {
-      onSubmit('0');
-    } else if (num !== '0' && num.startsWith('0')) {
-      onSubmit(num.slice(1));
+  const update = (text: string) => {
+    if (text.endsWith('.')) { onSubmit(text); return; }
+
+    var num = text.length > 0 ? parseFloat(text) : 0;
+
+    if (isNaN(num)) {
+      setError(true);
+      onSubmit(text);
+      return;
     } else {
-      onSubmit(num);
+      setError(false);
+    }
+
+    if (num === 0) {
+      onSubmit('0');
+    } else {
+      onSubmit(num.toString());
     }
   };
 
@@ -25,9 +35,10 @@ export default function Input({ label, value, onSubmit }: InputProps) {
       mode='outlined'
       label={label}
       value={value}
+      error={error}
       keyboardType='numeric'
       onChangeText={update}
-      style={{ height: 45, textAlignVertical: 'center', textAlign: 'right', backgroundColor: '#f9f9f9' }}
+      style={{ height: 40, textAlignVertical: 'center', textAlign: 'right', backgroundColor: '#f9f9f9' }}
     />
   );
 }
