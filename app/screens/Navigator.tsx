@@ -2,7 +2,7 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Main from './main/Main';
+import Index from './main/Index';
 import More from './main/More';
 import About from './About';
 import Lollipop from './Lollipop';
@@ -20,7 +20,7 @@ export default function Navigator() {
       <Stack.Screen name='Main' options={{
         title: '单位换算',
         headerRight: () => <More />
-      }} component={Main} />
+      }} component={Index} />
       <Stack.Screen name='About' options={{ title: '关于' }} component={About} />
       <Stack.Screen name='Lollipop' options={{ title: '棒棒糖~' }} component={Lollipop} />
     </Stack.Navigator>

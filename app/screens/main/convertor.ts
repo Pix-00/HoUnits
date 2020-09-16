@@ -23,7 +23,7 @@ export const VUnit = [...VUnitIndex.keys()];
 export const commonMol = new Map([
   ['雌二醇', '272.38'],
   ['孕酮', '314.46'],
-  ['泌乳素', '0.0212766'],
+  ['泌乳素', '21276.6'],
   ['睾酮', '288.42']
 ]);
 
@@ -40,7 +40,7 @@ export function convert(value: string, wUnit: string, vUint: string, tUnit: stri
   if (wUnit.endsWith('mol')) { result *= +mol; }
   else if (wUnit.endsWith('IU')) { result /= +mol; }
 
-  if (result > 10000 || (result != 0 && result < 0.001)) {
+  if (result > 10000 || (result != 0 && result < 0.001) || isNaN(result)) {
     return -1;
   }
   return result;
