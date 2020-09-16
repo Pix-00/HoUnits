@@ -28,14 +28,14 @@ export const commonMol = new Map([
 ]);
 
 const TUnitIndex = new Map([
-  ['pg/mL', 1000 / 1000000000000],
-  ['ng/dL', 10 / 1000000000],
-  ['ng/mL', 1000 / 1000000000]
+  ['pg/mL', 1000000000000 / 1000],
+  ['ng/dL', 1000000000 / 10],
+  ['ng/mL', 1000000000 / 1000]
 ]);
 
 export function convert(value: string, wUnit: string, vUint: string, tUnit: string, mol?: string) {
 
-  var result = parseFloat(value) / WUnitIndex.get(wUnit) * VUnitIndex.get(vUint) * TUnitIndex.get(tUnit);
+  var result = parseFloat(value) * WUnitIndex.get(wUnit) / VUnitIndex.get(vUint) * TUnitIndex.get(tUnit);
 
   if (wUnit.endsWith('mol')) { result *= +mol; }
   else if (wUnit.endsWith('IU')) { result /= +mol; }
