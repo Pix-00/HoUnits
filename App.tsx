@@ -2,9 +2,11 @@ import { AppLoading } from 'expo';
 import React, { useEffect, useState } from 'react';
 import { DefaultTheme, Provider as PaperProvider, withTheme } from 'react-native-paper';
 import { enableScreens } from 'react-native-screens';
+import { Provider as StoreProvider } from 'react-redux';
 
 import { NavigationContainer } from '@react-navigation/native';
 
+import { store } from './app/rootStore';
 import Navigator from './app/screens/Navigator';
 
 enableScreens();
@@ -23,9 +25,11 @@ function Main() {
 
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Navigator />
-      </NavigationContainer>
+      <StoreProvider store={store}>
+        <NavigationContainer>
+          <Navigator />
+        </NavigationContainer>
+      </StoreProvider>
     </PaperProvider>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextInput } from 'react-native-paper';
 
 interface InputProps {
@@ -9,16 +9,15 @@ interface InputProps {
 }
 
 export default function Input({ label, value, error, onSubmit }: InputProps) {
-
   return (
     <TextInput
-      mode='outlined'
+      mode='flat'
       label={label}
       value={value}
       error={error}
-      keyboardType='numeric'
+      keyboardType='decimal-pad'
       onChangeText={onSubmit}
-      style={{ height: 42, textAlignVertical: 'center', textAlign: 'right', backgroundColor: '#f9f9f9' }}
+      style={{ height: 42, textAlignVertical: 'center', textAlign: 'right', backgroundColor: 'transparent' }}
     />
   );
 }

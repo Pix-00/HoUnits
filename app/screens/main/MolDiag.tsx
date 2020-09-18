@@ -1,18 +1,18 @@
 import React from 'react';
 import { Dimensions, FlatList, View } from 'react-native';
 import { Dialog, List, Portal } from 'react-native-paper';
+import { connect } from 'react-redux';
 
+import { commonMol } from './convertor';
+import { setMol } from './slice';
 
 interface MolDiagProps {
   visible: boolean;
-
-  molList: Map<string, string>;
-
-  onSubmit: (unit: string) => void;
+  setMol: (unit: string) => void;
   onCancel: () => void;
 }
 
-function MolDiag({ visible, molList, onSubmit, onCancel }: MolDiagProps) {
+function MolDiag({ visible, setMol, onCancel }: MolDiagProps) {
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onCancel}>
@@ -20,11 +20,11 @@ function MolDiag({ visible, molList, onSubmit, onCancel }: MolDiagProps) {
         <Dialog.Content>
           <View style={{ maxHeight: Dimensions.get('window').height * 0.65 }}>
             <FlatList
-              data={[...molList.keys()]}
+              data={[...commonMol.keys()]}
               keyExtractor={(name) => name}
               renderItem={({ item }) => <List.Item
                 title={item}
-                onPress={() => { onSubmit(molList.get(item)); onCancel(); }}
+                onPress={() => { setMol(commonMol.get(item)); onCancel(); }}
                 titleStyle={{ color: '#673ab7' }}
               />}
             />
@@ -36,4 +36,7 @@ function MolDiag({ visible, molList, onSubmit, onCancel }: MolDiagProps) {
 }
 
 
-export default MolDiag;
+export default connect(
+  null,
+  { setMol }
+)(MolDiag);

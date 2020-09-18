@@ -1,11 +1,10 @@
 export const WUnitIndex = new Map([
-  ['g', 1.0],
-  ['mg', 0.001],
   ['μg', 0.000001],
   ['ng', 0.000000001],
   ['pg', 0.000000000001],
   ['IU', 1.0],
   ['mIU', 0.001],
+  ['μIU', 0.000001],
   ['nmol', 0.000000001],
   ['pmol', 0.000000000001]
 ]);
@@ -37,8 +36,8 @@ export function convert(value: string, wUnit: string, vUint: string, tUnit: stri
 
   var result = parseFloat(value) * WUnitIndex.get(wUnit) / VUnitIndex.get(vUint) * TUnitIndex.get(tUnit);
 
-  if (wUnit.endsWith('mol')) { result *= +mol; }
-  else if (wUnit.endsWith('IU')) { result /= +mol; }
+  if (wUnit.endsWith('mol')) { result *= parseFloat(mol); }
+  else if (wUnit.endsWith('IU')) { result /= parseFloat(mol); }
 
   if (result > 10000 || (result != 0 && result < 0.001) || isNaN(result)) {
     return -1;

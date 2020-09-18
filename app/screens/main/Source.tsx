@@ -1,8 +1,15 @@
 import React, { Fragment, useState } from 'react';
 import { Clipboard, Keyboard, View } from 'react-native';
+import { Text } from 'react-native-paper';
+import { connect } from 'react-redux';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { RootState } from '../../rootStore';
+import { VUnit, WUnit } from './convertor';
+import MolDiag from './MolDiag';
+import { setMol, setValue, setVUnit, setWUnit } from './slice';
+import UnitDiag from './UnitDiag';
 
 interface SourceProps {
   value: string;
@@ -11,44 +18,45 @@ interface SourceProps {
   vUnit: string;
   setValue: (value: string) => void;
   setMol: (mol: string) => void;
-  setDiag: (diag: string) => void;
+  setWUnit: (wUnit: string) => void;
+  setVUnit: (vUnit: string) => void;
 }
-function Source({ value, mol, wUnit, vUnit, setValue, setMol, setDiag }: SourceProps) {
+
+function Source({ value, mol, wUnit, vUnit, setValue, setMol, setWUnit, setVUnit }: SourceProps) {
+  const [diag, setDiag] = useState('');
+
   const [vErr, serVErr] = useState(false);
   const [mErr, serMErr] = useState(false);
 
+  const onCancel = () => { setDiag(''); };
+
   const clean = (text: string, setError: (s: boolean) => void) => {
-    if (text.endsWith('.')) { return text; }
+    var num = text.length ? parseFloat(text) : 0;
 
-    var num = text.length > 0 ? parseFloat(text) : 0;
+    if (isNaN(num)) { setError(true); return text; } else { setError(false); }
 
-    if (isNaN(num)) {
-      setError(true);
+    if (text.endsWith('.') || text.endsWith('0')) {
       return text;
-    } else {
-      setError(false);
     }
-
     return num === 0 ? '0' : num.toString();
   };
-  const updateMol = (mol: string) => setMol(clean(mol, serMErr));
-  const updateValue = (value: string) => setValue(clean(value, serVErr));
+  const updateMol = (mol_: string) => setMol(clean(mol_, serMErr));
+  const updateValue = (value_: string) => setValue(clean(value_, serVErr));
 
   return (
     <Fragment>
-      <View style={{ flexDirection: "row" }}>
-        <View style={{ flex: 2, marginHorizontal: '2%' }}>
-          <Input label='待转换的值' value={value} error={vErr} onSubmit={updateValue} />
+      <View style={{ flexDirection: "row", alignItems: 'baseline' }}>
+        <View style={{ flex: 2, marginLeft: '2%' }}>
+          <Input label='' value={value} error={vErr} onSubmit={updateValue} />
         </View>
-        <View style={{ flexDirection: "row", marginHorizontal: '2%' }}>
+        <View style={{ flexDirection: "row", alignItems: 'baseline', marginHorizontal: '2%' }}>
           <Button
             labelStyle={{ fontSize: 26 }}
             onPress={() => { setDiag('w'); Keyboard.dismiss(); }}
           >{wUnit}</Button>
-          <Button
-            labelStyle={{ fontSize: 26 }}
-            color='#444'
-          >/</Button>
+          <Text
+            style={{ fontSize: 26 }}
+          >/</Text>
           <Button
             labelStyle={{ fontSize: 26 }}
             onPress={() => { setDiag('v'); Keyboard.dismiss(); }}
@@ -59,14 +67,18 @@ function Source({ value, mol, wUnit, vUnit, setValue, setMol, setDiag }: SourceP
       {
         wUnit.endsWith('mol') || wUnit.endsWith('IU')
           ?
-          <View style={{ flexDirection: "row", marginTop: '4%' }}>
-            <View style={{ flex: 2, marginHorizontal: '2%' }}>
-              <Input label='分子量' value={mol} error={mErr} onSubmit={updateMol} />
+          <View style={{ flexDirection: "row", alignItems: 'baseline' }}>
+            <Text style={{ fontSize: 26, marginLeft: '3%' }}
+            >@</Text>
+            <View style={{ flex: 2, marginLeft: '3%' }}>
+              <Input label='' value={mol} error={mErr} onSubmit={updateMol} />
             </View>
-            <Button style={{ marginTop: '0.7%', marginHorizontal: '2%' }}
-              labelStyle={{ fontSize: 26 }}
+            <Text style={{ fontSize: 26, marginLeft: '3%' }}
+            >g/mol</Text>
+            <Button style={{ marginHorizontal: '2%' }}
+              labelStyle={{ fontSize: 22 }}
               onPress={() => { setDiag('m'); Keyboard.dismiss(); }}
-            >常用值</Button>
+            >-常用值-</Button>
           </View>
           :
           <View></View>
@@ -79,9 +91,28 @@ function Source({ value, mol, wUnit, vUnit, setValue, setMol, setDiag }: SourceP
         onPress={() => Clipboard.getString().then((text) => updateValue(text))}
       >~ 点击这里可以快速粘贴到输入框 ~</Button>
 
+      <UnitDiag
+        visible={diag === 'w'} unitList={WUnit} onSubmit={setWUnit} onCancel={onCancel}
+      />
+      <UnitDiag
+        visible={diag === 'v'} unitList={VUnit} onSubmit={setVUnit} onCancel={onCancel}
+      />
+      <MolDiag
+        visible={diag === 'm'} onCancel={onCancel}
+      />
     </Fragment>
   );
 }
 
 
-export default Source;
+const mapStateToProps = (state: RootState) => ({
+  value: state.main.value,
+  mol: state.main.mol,
+  wUnit: state.main.wUnit,
+  vUnit: state.main.vUnit
+});
+
+export default connect(
+  mapStateToProps,
+  { setValue, setMol, setWUnit, setVUnit }
+)(Source);

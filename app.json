@@ -3,7 +3,7 @@
     "name": "HoUnits",
     "slug": "HoUnits",
     "privacy": "public",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -12,7 +12,7 @@
       "backgroundColor": "#eee"
     },
     "updates": {
-      "fallbackToCacheTimeout": 5000
+      "fallbackToCacheTimeout": 10000
     },
     "assetBundlePatterns": [
       "assets/*"
@@ -23,7 +23,8 @@
     "android": {
       "permissions": [],
       "enableDangerousExperimentalLeanBuilds": true,
-      "package": "com.passionfruit.HoUnits"
+      "package": "com.passionfruit.HoUnits",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

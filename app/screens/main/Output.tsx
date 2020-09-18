@@ -1,15 +1,25 @@
 import React, { Fragment } from 'react';
 import { Clipboard, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { RadioButton, Text } from 'react-native-paper';
+import { connect } from 'react-redux';
 
 import Button from '../../components/Button';
+import RBHelper from '../../components/RBHelper';
+import { RootState } from '../../rootStore';
+import { convert } from './convertor';
+import { setTUnit } from './slice';
 
 interface OutputProps {
-  result: number;
+  mol: string;
+  value: string;
+  wUnit: string;
+  vUnit: string;
   tUnit: string;
+  setTUnit: (unit: string) => void;
 }
 
-function Output({ result, tUnit }: OutputProps) {
+function Output({ mol, value, wUnit, vUnit, tUnit, setTUnit }: OutputProps) {
+  const result = convert(value, wUnit, vUnit, tUnit, mol);
   const textResult = result.toFixed(3);
 
   return (
@@ -17,35 +27,46 @@ function Output({ result, tUnit }: OutputProps) {
       {
         result < 0
           ?
-          <Text
-            style={{ fontSize: 23, textAlign: 'center', color: '#ef5350' }} >
-            - 请选择合适的单位或检查输入 -
+          <Text style={{ fontSize: 22, textAlign: 'center', color: '#e57373' }} >
+            请选择合适的单位或检查输入
             </Text>
           :
-          <Text
-            style={{ fontSize: 27, marginLeft: '2.5%', color: '#42a5f5' }} >
+          <Text style={{ fontSize: 25, marginLeft: '6%', color: '#64b5f6' }} >
             {'结果:  ' + textResult + ' ' + tUnit}
           </Text>
-
       }
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: '4%' }}>
-        <Button
-          style={{ width: '40%', marginRight: '8%' }}
-          labelStyle={{ fontSize: 20, paddingVertical: '2.5%' }}
-          mode='outlined'
-          disabled={result < 0}
-          onPress={() => { Clipboard.setString(textResult); }}
-        >复制</Button>
-        <Button
-          style={{ width: '40%' }}
-          labelStyle={{ fontSize: 20, paddingVertical: '2.5%' }}
-          mode='outlined'
-          disabled={result < 0}
-          onPress={() => { Clipboard.setString(textResult + ' ' + tUnit); }}
-        >带单位复制</Button>
+      <View style={{
+        flexDirection: "row", justifyContent: 'space-between', marginLeft: '4%',
+        marginRight: '6.3%', marginTop: '3%', marginBottom: '-1.5%'
+      }}>
+        <RadioButton.Group onValueChange={unit => setTUnit(unit)} value={tUnit}>
+          <RBHelper value='pg/mL' />
+          <RBHelper value='ng/dL' />
+          <RBHelper value='ng/mL' />
+        </RadioButton.Group>
       </View>
-    </Fragment>
+      <Button
+        color='gray'
+        labelStyle={{ fontSize: 16 }}
+        style={{ marginTop: '3%' }}
+        disabled={result < 0}
+        onPress={() => { Clipboard.setString(textResult + tUnit); }}
+      >
+        ~ 点击这里可以复制转换结果(带单位) ~
+      </Button>
+    </Fragment >
   );
 }
 
-export default Output;
+const mapStateToProps = (state: RootState) => ({
+  value: state.main.value,
+  mol: state.main.mol,
+  wUnit: state.main.wUnit,
+  vUnit: state.main.vUnit,
+  tUnit: state.main.tUnit
+});
+
+export default connect(
+  mapStateToProps,
+  { setTUnit }
+)(Output);

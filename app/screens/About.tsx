@@ -1,15 +1,17 @@
-import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import React from 'react';
-import { View, Linking } from 'react-native';
+import { Linking, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
+
+import { useNavigation } from '@react-navigation/native';
 
 import BDivider from '../components/BDivider';
+import Button from '../components/Button';
 
 function About() {
   const local = Constants.nativeAppVersion;
-  const current = Constants.expoVersion;
+  const revisionId = Constants.manifest.revisionId;
 
   var navigation = useNavigation();
 
@@ -23,20 +25,24 @@ function About() {
         <View style={{ paddingBottom: '5%' }}><BDivider /></View>
 
         <Text style={{ textAlign: 'center', fontSize: 20, color: '#5bcffa' }}>
-          C1区内分泌科 特供
-          </Text>
-        <Text style={{ textAlign: 'center', fontSize: 20, color: '#5bcffa', marginBottom: 20 }}>
-          QQ群号: 1128928344
-          </Text>
+          C1区内分泌科1号诊室
+        </Text>
+        <Button
+          color='#5bcffa'
+          style={{ marginHorizontal: '12%', marginBottom: '6%' }}
+          labelStyle={{ fontSize: 16 }}
+          onPress={() => Linking.openURL('https://jq.qq.com/?_wv=1027&k=TiXfe8dE')}>
+          - QQ群(1128928344) -
+          </Button>
         <Text style={{ textAlign: 'center', fontSize: 20, color: '#f5aab9' }}>
-          by  kiko的猫猫
+          made by: kiko的猫猫
           </Text>
         <Button
           color='#f5aab9'
-          style={{ paddingHorizontal: '12%' }}
+          style={{ marginHorizontal: '12%' }}
           labelStyle={{ fontSize: 16 }}
           onPress={() => { navigation.navigate('Lollipop'); }}>
-          ~ 打赏猫猫棒棒糖 ~
+          ~ 给猫猫投喂棒棒糖 ~
         </Button>
 
         <View style={{ paddingVertical: '3.5%', paddingHorizontal: '11%' }}><BDivider /></View>
@@ -51,17 +57,8 @@ function About() {
 
         <View style={{ paddingVertical: '3.5%' }}><BDivider /></View>
 
-        <Text style={{ textAlign: 'center', fontSize: 18, margin: 10 }}>当前版本：{local}</Text>
-        <Text style={{ textAlign: 'center', fontSize: 18, margin: 10 }}>本地版本：{current}</Text>
-        {
-          local !== current
-            ?
-            <Text style={{ textAlign: 'center', fontSize: 20, margin: 10, color: 'orange' }}>
-              !  应用已通过OTA更新  !
-            </Text>
-            :
-            <View></View>
-        }
+        <Text style={{ textAlign: 'center', fontSize: 18, margin: 10 }}>本地版本：{local}</Text>
+        <Text style={{ textAlign: 'center', fontSize: 18, margin: 10 }}>Revision：{revisionId}</Text>
 
         <View style={{ paddingTop: '3.5%' }}><BDivider /></View>
 

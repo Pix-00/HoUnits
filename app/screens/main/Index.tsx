@@ -1,51 +1,55 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React, { Fragment, useCallback, useState } from 'react';
+import { Dimensions, StatusBar, View } from 'react-native';
+
+import { useHeaderHeight } from '@react-navigation/stack';
 
 import BDivider from '../../components/BDivider';
-import { commonMol, convert, VUnit, WUnit } from './convertor';
-import MolDiag from './MolDiag';
 import Output from './Output';
+import Action from './quick_access/Action';
+import QuickAccess from './quick_access/QuickAccess';
 import Source from './Source';
-import Target from './Target';
-import UnitDiag from './UnitDiag';
+
+const useComponentSize = () => {
+  const [size, setSize] = useState(null);
+
+  const onLayout = useCallback(event => {
+    const { width, height } = event.nativeEvent.layout;
+    setSize({ width, height });
+  }, []);
+
+  return [size, onLayout];
+};
+
 
 function Index() {
-  const [value, setValue] = useState('0');
-  const [mol, setMol] = useState('0');
-
-  const [wUnit, setWUnit] = useState('μg');
-  const [vUnit, setVUnit] = useState('L');
-  const [tUnit, setTUnit] = useState('pg/mL');
-
-  const [diag, setDiag] = useState('');
-  const onCancel = () => { setDiag(''); };
-
-  const result = convert(value, wUnit, vUnit, tUnit, mol);
+  const [size, onLayout] = useComponentSize();
+  const headerHeight = useHeaderHeight();
 
   return (
-    <View style={{ margin: '7%' }}      >
-      <Source value={value} mol={mol} wUnit={wUnit} vUnit={vUnit} setValue={setValue} setMol={setMol} setDiag={setDiag} />
+    <Fragment>
+      <View style={{ margin: '7%' }}>
+        <View onLayout={onLayout}>
+          <Source />
+          <View style={{ paddingTop: '2%', paddingBottom: '3%' }}><BDivider /></View>
+          <Output />
+          <View style={{ paddingTop: '3%' }}><BDivider /></View>
+        </View>
 
-      <View style={{ paddingTop: '4%', paddingBottom: '3%' }}><BDivider /></View>
+        {
+          size ?
+            <View style={{
+              height: Dimensions.get('window').height - headerHeight - StatusBar.currentHeight - size.height - 2
+            }}>
+              <QuickAccess />
+            </View>
+            :
+            <View></View>
+        }
 
-      <Target tUnit={tUnit} setTUnit={setTUnit} />
+      </View >
 
-      <View style={{ paddingBottom: '4%', paddingTop: '2%' }}><BDivider /></View>
-
-      <Output result={result} tUnit={tUnit} />
-
-      <View style={{ paddingBottom: '5%', paddingTop: '5%' }}><BDivider /></View>
-
-      <UnitDiag
-        visible={diag === 'w'} w={true} unitList={WUnit} onSubmit={setWUnit} onCancel={onCancel}
-      />
-      <UnitDiag
-        visible={diag === 'v'} w={false} unitList={VUnit} onSubmit={setVUnit} onCancel={onCancel}
-      />
-      <MolDiag
-        visible={diag === 'm'} molList={commonMol} onSubmit={setMol} onCancel={onCancel}
-      />
-    </View >
+      <Action />
+    </Fragment >
   );
 }
 
