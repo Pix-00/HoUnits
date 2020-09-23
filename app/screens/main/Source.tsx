@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Clipboard, Keyboard, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { connect } from 'react-redux';
@@ -44,36 +44,30 @@ function Source({ value, mol, wUnit, vUnit, setValue, setMol, setWUnit, setVUnit
   const updateValue = (value_: string) => setValue(clean(value_, serVErr));
 
   return (
-    <Fragment>
+    <View>
       <View style={{ flexDirection: "row", alignItems: 'baseline' }}>
-        <View style={{ flex: 2, marginLeft: '2%' }}>
-          <Input label='' value={value} error={vErr} onSubmit={updateValue} />
-        </View>
-        <View style={{ flexDirection: "row", alignItems: 'baseline', marginHorizontal: '2%' }}>
-          <Button
-            labelStyle={{ fontSize: 26 }}
-            onPress={() => { setDiag('w'); Keyboard.dismiss(); }}
-          >{wUnit}</Button>
-          <Text
-            style={{ fontSize: 26 }}
-          >/</Text>
-          <Button
-            labelStyle={{ fontSize: 26 }}
-            onPress={() => { setDiag('v'); Keyboard.dismiss(); }}
-          >{vUnit}</Button>
-        </View>
+        <Input value={value} error={vErr} onSubmit={updateValue} />
+        <Button
+          labelStyle={{ fontSize: 26 }}
+          onPress={() => { setDiag('w'); Keyboard.dismiss(); }}
+        >{wUnit}</Button>
+        <Text
+          style={{ fontSize: 26 }}
+        >/</Text>
+        <Button
+          labelStyle={{ fontSize: 26 }}
+          onPress={() => { setDiag('v'); Keyboard.dismiss(); }}
+        >{vUnit}</Button>
       </View>
 
       {
         wUnit.endsWith('mol') || wUnit.endsWith('IU')
           ?
-          <View style={{ flexDirection: "row", alignItems: 'baseline' }}>
-            <Text style={{ fontSize: 26, marginLeft: '3%' }}
+          <View style={{ flexDirection: "row", alignItems: 'baseline', marginTop: '2%' }}>
+            <Text style={{ fontSize: 26, marginLeft: '2%' }}
             >@</Text>
-            <View style={{ flex: 2, marginLeft: '3%' }}>
-              <Input label='' value={mol} error={mErr} onSubmit={updateMol} />
-            </View>
-            <Text style={{ fontSize: 26, marginLeft: '3%' }}
+            <Input value={mol} error={mErr} onSubmit={updateMol} />
+            <Text style={{ fontSize: 26, marginLeft: '1%', color: '#666' }}
             >g/mol</Text>
             <Button style={{ marginHorizontal: '2%' }}
               labelStyle={{ fontSize: 22 }}
@@ -100,7 +94,7 @@ function Source({ value, mol, wUnit, vUnit, setValue, setMol, setWUnit, setVUnit
       <MolDiag
         visible={diag === 'm'} onCancel={onCancel}
       />
-    </Fragment>
+    </View >
   );
 }
 

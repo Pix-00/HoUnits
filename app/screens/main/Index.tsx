@@ -9,20 +9,20 @@ import Action from './quick_access/Action';
 import QuickAccess from './quick_access/QuickAccess';
 import Source from './Source';
 
-const useComponentSize = () => {
-  const [size, setSize] = useState(null);
+const useComponentHeight = () => {
+  const [height, setHeight] = useState(undefined);
 
   const onLayout = useCallback(event => {
-    const { width, height } = event.nativeEvent.layout;
-    setSize({ width, height });
+    const { width, height_ } = event.nativeEvent.layout;
+    setHeight(height_);
   }, []);
 
-  return [size, onLayout];
+  return [height, onLayout];
 };
 
 
 function Index() {
-  const [size, onLayout] = useComponentSize();
+  const [height, onLayout] = useComponentHeight();
   const headerHeight = useHeaderHeight();
 
   return (
@@ -36,9 +36,9 @@ function Index() {
         </View>
 
         {
-          size ?
+          height ?
             <View style={{
-              height: Dimensions.get('window').height - headerHeight - StatusBar.currentHeight - size.height - 2
+              height: Dimensions.get('window').height - headerHeight - StatusBar.currentHeight - height - 2
             }}>
               <QuickAccess />
             </View>

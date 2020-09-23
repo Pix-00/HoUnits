@@ -1,5 +1,6 @@
 import { AppLoading } from 'expo';
-import React, { useEffect, useState } from 'react';
+import { useAssets } from 'expo-asset';
+import React from 'react';
 import { DefaultTheme, Provider as PaperProvider, withTheme } from 'react-native-paper';
 import { enableScreens } from 'react-native-screens';
 import { Provider as StoreProvider } from 'react-redux';
@@ -12,16 +13,14 @@ import Navigator from './app/screens/Navigator';
 enableScreens();
 
 function Main() {
-  const [ready, setReady] = useState(false);
+  const [assets] = useAssets([
+    require('./assets/wx.png'),
+    require('./assets/vfb.png')
+  ]);
 
-  useEffect(() => {
-    async function asyncInit() {
-      setReady(true);
-    }
-    asyncInit();
-  }, []);
-
-  if (!ready) { return <AppLoading />; }
+  if (!assets) {
+    return <AppLoading autoHideSplash />;
+  }
 
   return (
     <PaperProvider theme={theme}>
