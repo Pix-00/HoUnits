@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput } from 'react-native-paper';
+import { TextField, View } from 'react-native-ui-lib';
 
 interface InputProps {
   value: string;
@@ -9,13 +9,15 @@ interface InputProps {
 
 export default function Input({ value, error, onSubmit }: InputProps) {
   return (
-    <TextInput
-      mode='flat'
-      value={value}
-      error={error}
-      keyboardType='decimal-pad'
-      onChangeText={onSubmit}
-      style={{ height: 40, marginHorizontal: '2%', backgroundColor: 'transparent', flex: 2 }}
-    />
+    <View
+      flexG
+    >
+      <TextField
+        error={error ? ' ' : ''}
+        onChangeText={t => onSubmit(t)}
+        value={value}
+        keyboardType='numeric'
+      />
+    </View>
   );
 }

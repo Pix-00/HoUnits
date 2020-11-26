@@ -64,12 +64,12 @@ function Source({ value, mol, wUnit, vUnit, setValue, setMol, setWUnit, setVUnit
         wUnit.endsWith('mol') || wUnit.endsWith('IU')
           ?
           <View style={{ flexDirection: "row", alignItems: 'baseline', marginTop: '2%' }}>
-            <Text style={{ fontSize: 26, marginLeft: '2%' }}
+            <Text style={{ fontSize: 26, marginRight: '2%' }}
             >@</Text>
             <Input value={mol} error={mErr} onSubmit={updateMol} />
-            <Text style={{ fontSize: 26, marginLeft: '1%', color: '#666' }}
+            <Text style={{ fontSize: 26, marginLeft: '2%', color: '#666' }}
             >g/mol</Text>
-            <Button style={{ marginHorizontal: '2%' }}
+            <Button style={{ marginLeft: '1.5%' }}
               labelStyle={{ fontSize: 22 }}
               onPress={() => { setDiag('m'); Keyboard.dismiss(); }}
             >-常用值-</Button>

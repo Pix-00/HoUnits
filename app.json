@@ -22,7 +22,6 @@
     },
     "android": {
       "permissions": [],
-      "enableDangerousExperimentalLeanBuilds": true,
       "package": "com.passionfruit.HoUnits",
       "googleServicesFile": "./google-services.json"
     }
